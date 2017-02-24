@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-10-27 12:02:28 by Hibernate Tools 5.2.0.Alpha3 -->
+<hibernate-mapping>
+    <class name="com.example.pojos.Blog" table="BLOG">
+        <id name="id" type="string">
+            <column name="ID" />
+            <generator class="uuid" />
+        </id>
+		
+        <property name="content" column="CONTENT" type="text"/>
+        <property name="date" column="CREATE_DATE" type="date"/>    
+    </class>
+</hibernate-mapping>
+

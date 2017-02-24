@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+	"http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+	<!-- 动态开启方法调用 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.devMode" value="true" />
+
+	<package name="default" namespace="/JSP" extends="struts-default">
+	
+		<action name="chooseWords" class="chooseWordsAction">
+			
+		</action>
+		
+		
+		<action name="logup" class="logupAction">
+			<result name="success">/JSP/back.jsp</result>
+			<result name="fail"></result>
+		</action>
+		
+		<action name="chooseWords" class="chooseWordsAction">
+			<result name="success">/JSP/back.jsp</result>
+		</action>
+		
+		<action name="blog" class="blogAction">
+			<result name="back">/back.jsp</result>
+		</action>
+		
+		<!-- <action name="test" class="testAction">
+			<result type="json"> 
+				<param name="root">root</param>
+			</result>
+		</action> -->
+
+	</package>
+
+	<package name="json_package" namespace="/JSP" extends="json-default">
+		<action name="getBlog" class="getBlogAction">
+			<result name="success" type="json">
+				<param name="root">content</param>
+			</result>
+		</action>
+		
+		<action name="login" class="loginAction">
+			<result type="json"></result>
+		</action>
+		
+		<action name="wordsToUI" class="wordsToUIAction">
+			<result type="json"></result>
+		</action>
+		
+		<action name="checkUsername" class="checkUsernameAction">
+			<result type="json"></result>
+		</action>
+		
+		<action name="getPassword" class="getPasswordAction">
+			<result type="json"></result>
+		</action>
+		<action name="setPassword" class="setPasswordAction">
+			<result type="json"></result>
+		</action>
+		<action name="updateRecord" class="updateRecordAction">
+			<result type="json"></result>
+		</action>
+	</package>
+
+
+</struts>

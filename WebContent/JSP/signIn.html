@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>Signin Template for Bootstrap</title>
+
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<link href="css/signin.css" rel="stylesheet">
+
+		<script src="js/jquery-3.0.0.min.js"></script>
+
+		<script type="text/javascript">
+			$(function() {
+				$("#logup").click(function() {
+						alert(($("#username").val()) + " " + ($("#password").val()));
+					
+					$.ajax({
+						type: "post",
+						url: "logup",
+						data: {
+							username: $("#username").val(),
+							password: $("#password").val()
+						},
+						success: function(data) {
+							alert("done");
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							alert(XMLHttpRequest.status);
+							alert(XMLHttpRequest.readyState);
+							alert(textStatus);
+						}
+					});
+
+			})
+			});
+		</script>
+	</head>
+
+	<body>
+
+		<div class="container">
+
+			<div class="jumbotron" style="float: left;">
+				<h1>Hello, guys!</h1>
+				<p>This is the first website I do for myself. Of course, just for testing.</p>
+				<p>This is the first website I do for myself. Of course, just for testing.</p>
+				<p>
+					<a href="" class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a>
+				</p>
+			</div>
+
+			<form action="login" method="post" class="form-signin" role="form" style="float: left;">
+				<h2 class="form-signin-heading">Please sign in</h2>
+				<input id="username" name="username" type="text" class="form-control" placeholder="Username" required autofocus>
+				<input id="password" name="password" type="password" class="form-control" placeholder="Password" required>
+				<button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+				<button id="logup" class="btn btn-lg btn-primary" type="button" style="float: right;background-color: #2AABD2;">Sign up</button>
+			</form>
+
+			<div style="clear: both;"></div>
+
+		</div>
+	</body>
+
+</html>

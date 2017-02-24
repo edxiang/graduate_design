@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-10-27 12:02:28 by Hibernate Tools 5.2.0.Alpha3 -->
+<hibernate-mapping>
+    <class name="com.example.pojos.TOEFL" table="TOEFL">
+        <id name="id" type="string">
+            <column name="ID" />
+            <generator class="uuid" />
+        </id>
+		
+        <property name="word" column="WORD" type="string"/>
+        <property name="pron" column="PRON" type="string"/>
+        <property name="means" column="MEANS" type="string"/>  
+        <property name="symbols" column="SYMBOLS" type="string"/>
+    </class>
+</hibernate-mapping>
+

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/task
+	http://www.springframework.org/schema/task/spring-task.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<!-- 驱动类 -->
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<!-- 连接字符串 -->
+		<property name="jdbcUrl"
+			value="jdbc:mysql://localhost:3306/hibernate_first?useUnicode=true&amp;characterEncoding=utf8" />
+		<!-- 用户名 -->
+		<property name="user" value="root" />
+		<!-- 密码 -->
+		<property name="password" value="" />
+		<!-- 初始化创建10个连接 -->
+		<property name="initialPoolSize" value="10" />
+		<!-- 最大连接数 -->
+		<property name="maxPoolSize" value="30" />
+		<!-- 最小连接数 -->
+		<property name="minPoolSize" value="3" />
+		<!-- 连接用完后每次新增连接数 -->
+		<property name="acquireIncrement" value="5"></property>
+		<!-- 获取连接超时时间，如果超过此时间未获取到连接则抛出异常 单位为毫秒 -->
+		<property name="checkoutTimeout" value="3000"></property>
+		<!-- 每隔120毫秒检测连接池内的空闲连接 -->
+		<property name="idleConnectionTestPeriod" value="120"></property>
+		<!-- 最大的PreparedStatement 数量 -->
+		<property name="maxStatements" value="600"></property>
+	</bean>
+
+	<!-- 配置hibernate的SessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.connection.autocommit">false</prop>
+			</props>
+		</property>
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:com/example/pojos</value>
+			</list>
+		</property>
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="transactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="txManager" />
+		<!-- 配置事务属性 -->
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<list>
+				<value>*Dao</value>
+				<value>*Service</value>
+				<!-- <value>*Action</value> -->
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- <tx:advice id="txAdvice" transaction-manager="txManager"> <tx:attributes> 
+		<tx:method name="get*" read-only="true" /> <tx:method name="*" /> </tx:attributes> 
+		</tx:advice> <aop:config> <aop:pointcut id="txMethods" expression="execution(* 
+		com.example.service.*Service.*(..))" /> <aop:advisor advice-ref="txAdvice" 
+		pointcut-ref="txMethods" /> </aop:config> -->
+
+
+	<bean id="blogDao" class="com.example.dao.BlogDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="wordsDao" class="com.example.dao.WordsDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="userDao" class="com.example.dao.UserDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="userService" class="com.example.service.UserService">
+		<property name="userDao" ref="userDao" />
+	</bean>
+	<bean id="blogService" class="com.example.service.BlogService">
+		<property name="blogDao" ref="blogDao" />
+	</bean>
+	<bean id="wordsService" class="com.example.service.WordsService">
+		<property name="wordsDao" ref="wordsDao" />
+	</bean>
+
+	<bean id="loginAction" scope="prototype" class="com.example.action.LoginAction">
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="logupAction" scope="prototype" class="com.example.action.LogupAction">
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="blogAction" scope="prototype" class="com.example.action.BlogAction">
+		<property name="blogService" ref="blogService" />
+	</bean>
+	<bean id="getBlogAction" scope="prototype" class="com.example.action.GetBlogAction">
+		<property name="blogService" ref="blogService" />
+	</bean>
+	<bean id="testAction" scope="prototype" class="com.example.action.TestAction">
+		<property name="blogService" ref="blogService" />
+	</bean>
+	<bean id="chooseWordsAction" scope="prototype"
+		class="com.example.action.ChooseWordsAction">
+		<property name="wordsService" ref="wordsService" />
+	</bean>
+	<bean id="wordsToUIAction" scope="prototype" class="com.example.action.WordsToUIAction">
+	</bean>
+	<bean id="checkUsernameAction" scope="prototype" class="com.example.action.CheckUsernameAction">
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="getPasswordAction" scope="prototype" class="com.example.action.GetPasswordAction">
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="setPasswordAction" scope="prototype" class="com.example.action.SetPasswordAction">
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="updateRecordAction" scope="prototype" class="com.example.action.UpdateRecordAction">
+		<property name="wordsService" ref="wordsService" />
+	</bean>
+
+
+
+
+</beans>
+

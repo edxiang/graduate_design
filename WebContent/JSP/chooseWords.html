@@ -1,0 +1,116 @@
+	<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>choose word</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/own.css" />
+		<script type="text/javascript" src="js/jquery-3.0.0.min.js">
+		</script>
+
+		<script type="text/javascript">
+			function changecapacitytowhite(name) {
+				//this.style.color = "#999";
+				alert(this.target.id);
+			}
+
+			function changecapacitytoblack() {
+				var obj = document.getElementById(name);
+				obj.style.color = "#000";
+			}
+
+			function show() {
+				event.stopPropagation();
+				alert("show here");
+			}
+			
+			$(function() {
+				$("#CET_6").click(function() {
+					$.ajax({
+						type: "post",
+						url: "chooseWords",
+						data: {
+							choose_words:"CET_6"
+						},
+						success: function(data) {
+							alert("done");
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							alert(XMLHttpRequest.status);
+							alert(XMLHttpRequest.readyState);
+							alert(textStatus);
+						}
+					});
+				});
+				$("#CET_4").click(function(){
+					alert("this is cet_4");
+					alert(($("#hiddenusername").val()));
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="page-header">
+				<h1>pick up one</h1>
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<a id="cet6" href="javascript:void(0)" style="text-decoration: none;color: #000000;">
+						<div id="CET_6" class="panel panel-primary">
+							<div class="panel-heading">
+								<h3 class="panel-title" style="font-size: 20px;text-align: center;">CET-6</h3>
+							</div>
+							<div class="panel-body" style="text-align: center;">
+								<p>there are 2081 words</p>
+								<p>may take 149 days to finish it</p>
+							</div>
+						</div>
+					</a>
+
+					<a id="cet4" href="javascript:void(0)" style="text-decoration: none;color: #000000;">
+						<div id="CET_4" class="panel panel-primary">
+							<div class="panel-heading">
+								<h3 class="panel-title" style="font-size: 20px;text-align: center;">CET-4</h3>
+							</div>
+							<div class="panel-body" style="text-align: center;">
+								<p>there are 4059 words</p>
+								<p>may take 200 days to finish it</p>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="col-sm-4">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">gotta you</h3>
+						</div>
+						<div class="panel-body">
+							<p>content456content456</p>
+							<p>content456content456</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">gotta you</h3>
+						</div>
+						<div class="panel-body">
+							<p>content456content456</p>
+							<p>content456content456</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!--在jsp中 value=${username} 这种写法是可以的
+		<input id="hiddenusername" type="text" hidden="hidden" value=${username}/>-->
+	</body>
+
+</html>

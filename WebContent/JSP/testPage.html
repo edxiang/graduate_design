@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title></title>
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/own.css" />
+<style type="text/css">
+.testing {
+	width: 615px;
+	height: 300px;
+	margin: 0px 0px;
+	background-color: #eee;
+	padding: 75px 0;
+	text-align: center;
+	font-size: 20px;
+	border-radius: 6px;
+}
+
+input {
+	-web-kit-appearance: none;
+	-moz-appearance: none;
+	height: 30px;
+	border-radius: 4px;
+	border: 1px solid #c8cccf;
+	color: #6a6f77;
+}
+</style>
+<script type="text/javascript" src="js/jquery-3.0.0.min.js">
+	
+</script>
+<script type="text/javascript">
+	var arr_words = new Array();
+	var index = 0;
+	window.onload = function() {
+		$.ajax({
+			type : "post",
+			url : "wordsToUI",
+			dataType : "text",
+			success : function(json) {
+				var obj = $.parseJSON(json);
+				var json_value = obj.result;
+				var json_obj = $.parseJSON(json_value);
+				toList(json_obj);
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert(XMLHttpRequest.status);
+				alert(XMLHttpRequest.readyState);
+				alert(textStatus);
+			}
+		});
+	}
+
+	function toList(json_obj) {
+		for (var i = 0; i < 6; i++) {
+			var s = [json_obj[i]['word'], json_obj[i]['pron'], json_obj[i]['means'] ];
+			arr_words[i] = s;
+		}
+		
+		addWords(index);
+	}
+
+	function addWords(index) {
+		var obj = document.getElementById("MeansOrPron");
+		obj.innerHTML = arr_words[index][2];
+	}
+
+	function addPron(index) {
+		var obj = document.getElementById("MeansOrPron");
+		obj.innerHTML = arr_words[index][1];
+	}
+
+	function test() {
+		var userInput = $("#userInput").val();
+		if (userInput == arr_words[index][0]) {
+			if (index == 6) {
+				index = 0;
+				$("#userInput").val("");
+				addPron(index);
+			} else {
+				index++;
+				$("#userInput").val("");
+				addWords(index);
+			}
+		} else {
+			alert("wrong");
+			$("#userInput").val("");
+		}
+	}
+
+	function able() {
+		var btn = document.getElementById('finish');
+		btn.disabled = "";
+	}
+</script>
+</head>
+
+<body>
+	<div class="container" style="border: solid #269ABC 1px; width: 650px;">
+		<h1>
+			<span class="label label-info" style="margin: 0 auto">TESTING:please
+				finish them all</span>
+		</h1>
+		<div class="testing">
+			<span id="MeansOrPron">means:meansmeansmeansmeansmeansmeans</span>
+			<p style="font-size: 17px; padding-top: 30px;">
+				please input the word:&nbsp; <input id="userInput" type="text"
+					placeholder="Username" required autofocus>
+				<button id="submit" class="btn btn-primary" type="button"
+					onclick="test()">submit</button>
+			</p>
+		</div>
+
+		<p style="margin-top: 3px;">
+			<a href="words.html">
+				<button type="button" class="btn btn-lg btn-success">BACK</button>
+			</a>
+			<button id="finish" type="button" class="btn btn-lg btn-success"
+				style="float: right;" disabled="disabled">FINISH</button>
+		</p>
+	</div>
+</body>
+
+</html>
